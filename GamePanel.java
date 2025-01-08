@@ -17,9 +17,10 @@ public class GamePanel extends JPanel implements Runnable {
     protected final int screenWidth = tileSize * maxScreenCol; // 768px
     protected final int screenHeight = tileSize * maxScreenRow; // 576px
 
-    protected double playerPosX = 100;
-    protected double playerPosY = 100;
-    protected double playerSpeed = 0.00004;
+    protected int FPS = 60;
+    protected int playerPosX = 100;
+    protected int playerPosY = 100;
+    protected int playerSpeed = 4;
 
     protected GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -36,16 +37,26 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        double drawInterval = 1000000000 / FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
         while (gameThread != null) {
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            lastTime = currentTime;
 
-            update();
-
-            repaint();
+            if (delta >= 1) {
+                update();
+                repaint();
+                delta--;
+            }
         }
     }
 
     protected void update() {
-        double diagSpeed = playerSpeed / 6;
+        double diagSpeed = playerSpeed / 4;
         if (keyH.up && keyH.right) {
             playerPosX += diagSpeed;
             playerPosY -= diagSpeed;
@@ -69,6 +80,11 @@ public class GamePanel extends JPanel implements Runnable {
         } else if (keyH.left) {
             playerPosX -= playerSpeed;
         }
+
+        if (keyH.teleport) {
+            playerPosX = (int) (Math.random() * (screenWidth - 0 + 1)) + 0;
+            playerPosY = (int) (Math.random() * (screenHeight - 0 + 1)) + 0;
+        }
     }
 
     protected void paintComponent(Graphics g) {
@@ -76,7 +92,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setColor(Color.white);
-        g2.fillRect((int) playerPosX, (int) playerPosY, tileSize, tileSize);
+        g2.fillRect(playerPosX, playerPosY, tileSize, tileSize);
         g2.dispose();
     }
 }

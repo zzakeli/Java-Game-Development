@@ -4,6 +4,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
     protected boolean up, down, right, left;
+    protected boolean teleport;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -23,6 +24,9 @@ public class KeyHandler implements KeyListener {
         } else if (code == KeyEvent.VK_D) {
             right = true;
         }
+
+        if (code == KeyEvent.VK_C)
+            teleport = true;
     }
 
     @Override
@@ -38,6 +42,8 @@ public class KeyHandler implements KeyListener {
         } else if (code == KeyEvent.VK_D) {
             right = false;
         }
+        if (code == KeyEvent.VK_C)
+            teleport = false;
     }
 
 }
