@@ -1,10 +1,12 @@
+package Main;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    protected boolean up, down, right, left;
-    protected boolean teleport;
+    public boolean up, down, right, left;
+    public boolean teleport;
 
     @Override
     public void keyTyped(KeyEvent e) {
